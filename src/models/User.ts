@@ -52,8 +52,8 @@ export const UserFactory: Factory<UserInstance, UserAttributes> = (
 			allowNull: false,
 		},
 		type: {
-			type: DataTypes.ENUM(['administrator', 'operator'])
-		}
+			type: DataTypes.ENUM(['administrator', 'operator']),
+		},
 	};
 	const User: Sequelize.Model<UserInstance, UserAttributes> = sequelize.define<
 		UserInstance,

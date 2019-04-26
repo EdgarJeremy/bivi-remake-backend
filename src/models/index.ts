@@ -2,6 +2,10 @@ import Sequelize from 'sequelize';
 import ModelFactoryInterface from './typings/ModelFactoryInterface';
 import { UserFactory } from './User';
 import { TokenFactory } from './Token';
+import { PurposeFactory } from './Purpose';
+import { RequirementFactory } from './Requirement';
+import { QueueFactory } from './Queue';
+import { DocumentFactory } from './Document';
 
 const createModels: Function = (): ModelFactoryInterface => {
 	const {
@@ -26,6 +30,10 @@ const createModels: Function = (): ModelFactoryInterface => {
 		Sequelize,
 		User: UserFactory(sequelize, Sequelize),
 		Token: TokenFactory(sequelize, Sequelize),
+		Purpose: PurposeFactory(sequelize, Sequelize),
+		Requirement: RequirementFactory(sequelize, Sequelize),
+		Queue: QueueFactory(sequelize, Sequelize),
+		Document: DocumentFactory(sequelize, Sequelize),
 	};
 
 	Object.keys(db).forEach(

@@ -26,8 +26,8 @@ const usersRoute: Routes = (
 					count: number;
 					rows: UserInstance[];
 				} = await models.User.findAndCountAll({
-					limit: limit, 
-					offset: offset
+					limit: limit,
+					offset: offset,
 				});
 				const body: OkResponse = { data };
 
@@ -60,12 +60,17 @@ const usersRoute: Routes = (
 					username,
 					password,
 					type,
-				}: { name: string; username: string; password: string, type: 'administrator' | 'operator' } = req.body;
+				}: {
+					name: string;
+					username: string;
+					password: string;
+					type: 'administrator' | 'operator';
+				} = req.body;
 				const user: UserInstance = await models.User.create({
 					name,
 					username,
 					password: bcrypt.hashSync(password, 10),
-					type
+					type,
 				});
 				const body: OkResponse = { data: user };
 

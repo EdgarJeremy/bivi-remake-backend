@@ -29,9 +29,9 @@ export const createUser: express.Handler[] = wrapValidation(
 			in: 'body',
 			isEmpty: {
 				errorMessage: 'Tipe harus diisi',
-				negated: true
-			}
-		}
+				negated: true,
+			},
+		},
 	}),
 );
 
@@ -62,8 +62,8 @@ export const editUser: express.Handler[] = wrapValidation(
 			in: 'body',
 			isEmpty: {
 				errorMessage: 'Tipe harus diisi',
-				negated: true
-			}
-		}
+				negated: true,
+			},
+		},
 	}),
 );
