@@ -1,7 +1,15 @@
+import bcrypt from 'bcrypt';
+import d from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
+import createModels from '../src/models';
+import ModelFactoryInterface from '../src/models/typings/ModelFactoryInterface';
+import { UserInstance } from '../src/models/User';
+
 const log: (msg: string) => void = console.log;
+
+d.config();
 
 const dotenv: string = `
 # Database
@@ -33,3 +41,16 @@ if (!fs.existsSync(path.resolve(__dirname, '..', '.env'))) {
 	fs.writeFileSync(path.resolve(__dirname, '..', '.env'), dotenv);
 }
 log(chalk.cyan('(postinstall) : File .env telah dibuat\n'));
+
+
+log(chalk.cyan('(postinstall) : Membuat user admin'));
+const models: ModelFactoryInterface = createModels();
+models.User.create({
+	name: 'Administrator',
+	username: 'admin',
+	password: bcrypt.hashSync('admin', 10),
+	type: 'administrator'
+}).then((v: UserInstance) => {
+	log(chalk.cyan('(postinstall) : User admin telah dibuat'));
+	process.exit(0);
+});
