@@ -1,13 +1,14 @@
 import express from 'express';
 import { Routes } from './typings/RouteInterface';
 import ModelFactoryInterface from '../models/typings/ModelFactoryInterface';
-import parser, { ParsedQuery } from '../middlewares/pipes/parser';
 import a from '../middlewares/wrapper/a';
 import { PaginatedResult } from './typings/QueryInterface';
 import { PurposeInstance, PurposeAttributes } from '../models/Purpose';
 import { OkResponse } from './typings/BodyBuilderInterface';
 import NotFoundError from '../classes/NotFoundError';
 import { createPurpose, editPurpose } from './purposes.validation';
+import { Parser } from '../helpers/Parser';
+import sequelize from 'sequelize';
 
 const purposesRoute: Routes = (
 	app: express.Application,
@@ -18,15 +19,13 @@ const purposesRoute: Routes = (
 
 	router.get(
 		'/',
-		parser(),
+		Parser.validateQ(),
 		a(
 			async (req: express.Request, res: express.Response): Promise<void> => {
-				const { limit = 10, offset = 0 }: ParsedQuery = req.parsed;
-
-				const data: PaginatedResult<PurposeInstance> = await Purpose.findAndCountAll({
-					limit: limit,
-					offset: offset,
-				});
+				const parsed: sequelize.FindOptions<PurposeInstance> = Parser.parseQuery<
+					PurposeInstance
+				>(req.query.q, models);
+				const data: PaginatedResult<PurposeInstance> = await Purpose.findAndCountAll(parsed);
 				const body: OkResponse = { data };
 
 				res.json(body);

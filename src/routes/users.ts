@@ -7,7 +7,9 @@ import { OkResponse } from './typings/BodyBuilderInterface';
 import { UserInstance } from '../models/User';
 import NotFoundError from '../classes/NotFoundError';
 import { createUser, editUser } from './users.validation';
-import parser, { ParsedQuery } from '../middlewares/pipes/parser';
+import { Parser } from '../helpers/Parser';
+import sequelize from 'sequelize';
+import { PaginatedResult } from './typings/QueryInterface';
 
 const usersRoute: Routes = (
 	app: express.Application,
@@ -17,18 +19,14 @@ const usersRoute: Routes = (
 
 	router.get(
 		'/',
-		parser(),
+		Parser.validateQ(),
 		a(
 			async (req: express.Request, res: express.Response): Promise<void> => {
-				const { limit = 10, offset = 0 }: ParsedQuery = req.parsed;
-
-				const data: {
-					count: number;
-					rows: UserInstance[];
-				} = await models.User.findAndCountAll({
-					limit: limit,
-					offset: offset,
-				});
+				const parsed: sequelize.FindOptions<UserInstance> = Parser.parseQuery<UserInstance>(
+					req.query.q,
+					models,
+				);
+				const data: PaginatedResult<UserInstance> = await models.User.findAndCountAll(parsed);
 				const body: OkResponse = { data };
 
 				res.json(body);

@@ -1,13 +1,14 @@
 import express from 'express';
 import { Routes } from './typings/RouteInterface';
 import ModelFactoryInterface from '../models/typings/ModelFactoryInterface';
-import parser, { ParsedQuery } from '../middlewares/pipes/parser';
 import a from '../middlewares/wrapper/a';
 import { PaginatedResult } from './typings/QueryInterface';
 import { OkResponse } from './typings/BodyBuilderInterface';
 import NotFoundError from '../classes/NotFoundError';
 import { RequirementInstance, RequirementAttributes } from '../models/Requirement';
 import { createRequirement, editRequirement } from './requirement.validation';
+import { Parser } from '../helpers/Parser';
+import sequelize from 'sequelize';
 
 const requirementsRoute: Routes = (
 	app: express.Application,
@@ -18,15 +19,15 @@ const requirementsRoute: Routes = (
 
 	router.get(
 		'/',
-		parser(),
+		Parser.validateQ(),
 		a(
 			async (req: express.Request, res: express.Response): Promise<void> => {
-				const { limit = 10, offset = 0 }: ParsedQuery = req.parsed;
-
-				const data: PaginatedResult<RequirementInstance> = await Requirement.findAndCountAll({
-					limit: limit,
-					offset: offset,
-				});
+				const parsed: sequelize.FindOptions<RequirementInstance> = Parser.parseQuery<
+					RequirementInstance
+				>(req.query.q, models);
+				const data: PaginatedResult<RequirementInstance> = await Requirement.findAndCountAll(
+					parsed,
+				);
 				const body: OkResponse = { data };
 
 				res.json(body);
