@@ -8,8 +8,9 @@ export interface QueueAttributes {
 
 	name: string;
 	phone: string;
-	nik: string;
-	purpose_id?: number;
+    nik: string;
+    status: boolean;
+    purpose_id?: number;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -33,7 +34,12 @@ export const QueueFactory: Factory<QueueInstance, QueueAttributes> = (
 		nik: {
 			type: DataTypes.STRING(191),
 			allowNull: false,
-		},
+        },
+        status: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        }
 	};
 	const Queue: Sequelize.Model<QueueInstance, QueueAttributes> = sequelize.define<
 		QueueInstance,
