@@ -46,15 +46,20 @@ log(chalk.cyan('(postinstall) : Membuat user admin'));
 const models: ModelFactoryInterface = createModels();
 models.sequelize
 	.sync()
-	.then(() =>
-		models.User.create({
-			name: 'Administrator',
-			username: 'admin',
-			password: bcrypt.hashSync('admin', 10),
-			type: 'administrator',
-		}),
-	)
-	.then((v: UserInstance) => {
-		log(chalk.cyan('(postinstall) : User admin telah dibuat'));
-		process.exit(0);
+	.then(() => models.User.findOne({ where: { username: 'admin' } }))
+	.then((u: UserInstance | null) => {
+		if (!u) {
+			return models.User.create({
+				name: 'Administrator',
+				username: 'admin',
+				password: bcrypt.hashSync('admin', 10),
+				type: 'administrator',
+			}).then(() => {
+				log(chalk.cyan('(postinstall) : User admin telah dibuat'));
+				process.exit(0);
+			});
+		} else {
+			log(chalk.cyan('(postinstall) : User admin telah dibuat'));
+			process.exit(0);
+		}
 	});

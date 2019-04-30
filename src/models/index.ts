@@ -35,7 +35,7 @@ const createModels: Function = (): ModelFactoryInterface => {
 		Requirement: RequirementFactory(sequelize, Sequelize),
 		Queue: QueueFactory(sequelize, Sequelize),
 		Document: DocumentFactory(sequelize, Sequelize),
-		Schedule: ScheduleFactory(sequelize, Sequelize)
+		Schedule: ScheduleFactory(sequelize, Sequelize),
 	};
 
 	Object.keys(db).forEach(
