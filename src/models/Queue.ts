@@ -11,6 +11,7 @@ export interface QueueAttributes {
 	nik: string;
 	status: boolean;
 	purpose_id?: number;
+	user_id?: number;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -48,6 +49,7 @@ export const QueueFactory: Factory<QueueInstance, QueueAttributes> = (
 
 	Queue.associate = (models: ModelFactoryInterface): void => {
 		Queue.belongsTo(models.Purpose, { onDelete: 'cascade' });
+		Queue.belongsTo(models.User, { onDelete: 'cascade' });
 		Queue.hasMany(models.Document);
 	};
 

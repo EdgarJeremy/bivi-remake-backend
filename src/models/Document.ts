@@ -6,7 +6,9 @@ import ModelFactoryInterface from './typings/ModelFactoryInterface';
 export interface DocumentAttributes {
 	id?: number;
 
+	name: string;
 	data: string;
+	queue_id?: number;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -21,6 +23,10 @@ export const DocumentFactory: Factory<DocumentInstance, DocumentAttributes> = (
 	DataTypes: Sequelize.DataTypes,
 ): Sequelize.Model<DocumentInstance, DocumentAttributes> => {
 	const attributes: SequelizeAttributes<DocumentAttributes> = {
+		name: {
+			type: DataTypes.STRING(191),
+			allowNull: false,
+		},
 		data: {
 			type: DataTypes.TEXT,
 			allowNull: false,
