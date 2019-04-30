@@ -18,6 +18,23 @@ export const createPurpose: express.Handler[] = wrapValidation(
 				negated: true,
 			},
 		},
+		'requirements.*.name': {
+			in: 'body',
+			isEmpty: {
+				errorMessage: 'Nama requirement harus diisi',
+				negated: true,
+			},
+		},
+		'requirements.*.required': {
+			in: 'body',
+			isBoolean: {
+				errorMessage: 'Pilihan opsional harus boolean',
+			},
+			isEmpty: {
+				errorMessage: 'Pilihan opsional harus diisi',
+				negated: true,
+			},
+		},
 	}),
 );
 

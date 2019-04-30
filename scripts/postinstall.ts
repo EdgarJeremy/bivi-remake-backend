@@ -44,14 +44,17 @@ log(chalk.cyan('(postinstall) : File .env telah dibuat\n'));
 
 log(chalk.cyan('(postinstall) : Membuat user admin'));
 const models: ModelFactoryInterface = createModels();
-models.sequelize.sync()
-.then(() => models.User.create({
-	name: 'Administrator',
-	username: 'admin',
-	password: bcrypt.hashSync('admin', 10),
-	type: 'administrator',
-}))
-.then((v: UserInstance) => {
-	log(chalk.cyan('(postinstall) : User admin telah dibuat'));
-	process.exit(0);
-});
+models.sequelize
+	.sync()
+	.then(() =>
+		models.User.create({
+			name: 'Administrator',
+			username: 'admin',
+			password: bcrypt.hashSync('admin', 10),
+			type: 'administrator',
+		}),
+	)
+	.then((v: UserInstance) => {
+		log(chalk.cyan('(postinstall) : User admin telah dibuat'));
+		process.exit(0);
+	});
