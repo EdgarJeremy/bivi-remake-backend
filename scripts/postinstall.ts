@@ -45,7 +45,7 @@ log(chalk.cyan('(postinstall) : File .env telah dibuat\n'));
 log(chalk.cyan('(postinstall) : Membuat user admin'));
 const models: ModelFactoryInterface = createModels();
 models.sequelize
-	.sync()
+	.sync({ force: true })
 	.then(() => models.User.findOne({ where: { username: 'admin' } }))
 	.then((u: UserInstance | null) => {
 		if (!u) {

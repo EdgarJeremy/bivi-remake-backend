@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import { SequelizeAttributes } from './typings/SequelizeAttributes';
 import { Factory } from './typings/ModelInterface';
 import ModelFactoryInterface from './typings/ModelFactoryInterface';
+import { ScheduleTimeList } from '../helpers/ScheduleTime';
 
 export interface ScheduleAttributes {
 	id?: number;
@@ -9,9 +10,11 @@ export interface ScheduleAttributes {
 	date: Date;
 	open: string;
 	close: string;
-	tolerance: number;
+	processing_time: number; // in minute
+	tolerance: number; // in minute
 	break_start: string;
 	break_end: string;
+	operator: number;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -19,7 +22,9 @@ export interface ScheduleAttributes {
 
 export interface ScheduleInstance
 	extends Sequelize.Instance<ScheduleAttributes>,
-		ScheduleAttributes {}
+		ScheduleAttributes {
+			dataValues: any;
+		}
 
 export const ScheduleFactory: Factory<ScheduleInstance, ScheduleAttributes> = (
 	sequelize: Sequelize.Sequelize,
@@ -38,6 +43,10 @@ export const ScheduleFactory: Factory<ScheduleInstance, ScheduleAttributes> = (
 			type: DataTypes.TIME,
 			allowNull: false,
 		},
+		processing_time: {
+			type: DataTypes.INTEGER,
+			allowNull: false
+		},
 		tolerance: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -50,6 +59,10 @@ export const ScheduleFactory: Factory<ScheduleInstance, ScheduleAttributes> = (
 			type: DataTypes.TIME,
 			allowNull: false,
 		},
+		operator: {
+			type: DataTypes.INTEGER,
+			allowNull: false
+		}
 	};
 	const Schedule: Sequelize.Model<ScheduleInstance, ScheduleAttributes> = sequelize.define<
 		ScheduleInstance,

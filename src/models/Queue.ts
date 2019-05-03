@@ -6,10 +6,12 @@ import ModelFactoryInterface from './typings/ModelFactoryInterface';
 export interface QueueAttributes {
 	id?: number;
 
+	date: Date;
 	name: string;
 	phone: string;
 	nik: string;
 	status: boolean;
+	time: string;
 	purpose_id?: number;
 	user_id?: number;
 
@@ -24,6 +26,10 @@ export const QueueFactory: Factory<QueueInstance, QueueAttributes> = (
 	DataTypes: Sequelize.DataTypes,
 ): Sequelize.Model<QueueInstance, QueueAttributes> => {
 	const attributes: SequelizeAttributes<QueueAttributes> = {
+		date: {
+			type: DataTypes.DATEONLY,
+			allowNull: false,
+		},
 		name: {
 			type: DataTypes.STRING(191),
 			allowNull: false,
@@ -41,6 +47,10 @@ export const QueueFactory: Factory<QueueInstance, QueueAttributes> = (
 			allowNull: false,
 			defaultValue: false,
 		},
+		time: {
+			type: DataTypes.TIME,
+			allowNull: false
+		}
 	};
 	const Queue: Sequelize.Model<QueueInstance, QueueAttributes> = sequelize.define<
 		QueueInstance,

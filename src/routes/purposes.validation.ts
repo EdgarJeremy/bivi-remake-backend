@@ -11,13 +11,6 @@ export const createPurpose: express.Handler[] = wrapValidation(
 				negated: true,
 			},
 		},
-		requirements: {
-			in: 'body',
-			isEmpty: {
-				errorMessage: 'Requirements harus diisi',
-				negated: true,
-			},
-		},
 		'requirements.*.name': {
 			in: 'body',
 			isEmpty: {
@@ -47,10 +40,20 @@ export const editPurpose: express.Handler[] = wrapValidation(
 				negated: true,
 			},
 		},
-		requirements: {
+		'requirements.*.name': {
 			in: 'body',
 			isEmpty: {
-				errorMessage: 'Requirements harus diisi',
+				errorMessage: 'Nama requirement harus diisi',
+				negated: true,
+			},
+		},
+		'requirements.*.required': {
+			in: 'body',
+			isBoolean: {
+				errorMessage: 'Pilihan opsional harus boolean',
+			},
+			isEmpty: {
+				errorMessage: 'Pilihan opsional harus diisi',
 				negated: true,
 			},
 		},
