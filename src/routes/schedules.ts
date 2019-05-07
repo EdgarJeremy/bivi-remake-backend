@@ -49,7 +49,6 @@ const schedulesRoute: Routes = (
 				if (!schedule) throw new NotFoundError();
 
 				const timeList: ScheduleTimeList = await ScheduleTime.generateTime(schedule, models);
-				console.log(timeList);
 				schedule.dataValues.timeList = timeList;
 
 				const body: OkResponse = { data: schedule };
