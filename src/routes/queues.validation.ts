@@ -26,13 +26,6 @@ export const createQueue: express.Handler[] = wrapValidation(
                 negated: true
             }
         },
-        nik: {
-            in: 'body',
-            isEmpty: {
-                errorMessage: 'NIK harus diisi',
-                negated: true
-            }
-        },
         time: {
             in: 'body',
             isEmpty: {

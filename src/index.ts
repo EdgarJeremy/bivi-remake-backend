@@ -6,6 +6,7 @@ import cors from 'cors';
 import path from 'path';
 import http from 'http';
 import socketio from 'socket.io';
+import moment from 'moment';
 import _ from 'lodash';
 
 import ModelFactoryInterface from './models/typings/ModelFactoryInterface';
@@ -13,6 +14,7 @@ import createModels from './models';
 import createRoutes, { SiriusRouter } from './routes';
 import tokenMiddleware from './middlewares/pipes/token';
 import websocket from './websocket';
+import { QueueInstance } from './models/Queue';
 
 /** import .env file configuration */
 dotenv.config();
@@ -53,10 +55,10 @@ routes.forEach((route: SiriusRouter) => {
 			let verbs: any = route.methods.get
 				? 'GET'
 				: route.methods.post
-				? 'POST'
-				: route.methods.put
-				? 'PUT'
-				: 'DELETE';
+					? 'POST'
+					: route.methods.put
+						? 'PUT'
+						: 'DELETE';
 			let keys: any = info.keys.map((t: any) => t.name);
 			routeData[key].endpoints.push({ endpoint, verbs, keys });
 		}
@@ -102,6 +104,21 @@ models.sequelize
 	})
 	.then(
 		(): void => {
+			setInterval(async function (): Promise<void> {
+				const t: [number, QueueInstance[]] = await models.Queue.update({
+					status: 'Tidak Datang'
+				}, {
+						where: {
+							status: 'Belum Datang',
+							date: new Date(),
+							time: { [models.sequelize.Op.lt]: moment().format('HH:mm:ss') }
+						}
+					});
+				if (t[0] > 0) {
+					io.emit('UPDATE_LIST');
+				}
+			}, 1000 * 10)
+
 			web.listen(
 				process.env.PORT || 1234,
 				(): void => {

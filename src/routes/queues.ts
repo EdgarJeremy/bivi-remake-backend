@@ -1,5 +1,7 @@
 import express from 'express';
+import socketio from 'socket.io';
 import Bluebird from 'bluebird';
+import moment from 'moment';
 import { Routes } from "./typings/RouteInterface";
 import ModelFactoryInterface from '../models/typings/ModelFactoryInterface';
 import { createQueue } from './queues.validation';
@@ -16,7 +18,8 @@ import { PaginatedResult } from './typings/QueryInterface';
 
 const queuesRoute: Routes = (
     app: express.Application,
-    models: ModelFactoryInterface
+    models: ModelFactoryInterface,
+    io: socketio.Server
 ): express.Router => {
     const router: express.Router = express.Router();
     const { Queue, Document, Schedule }: ModelFactoryInterface = models;
@@ -33,7 +36,8 @@ const queuesRoute: Routes = (
                 const data: PaginatedResult<QueueInstance> = await Queue.findAndCountAll({
                     ...parsed,
                     where: {
-                        date: new Date()
+                        date: new Date(),
+                        status: 'Belum Datang'
                     }
                 });
                 const body: OkResponse = { data };
@@ -60,10 +64,16 @@ const queuesRoute: Routes = (
                 const num: number = await Queue.count({
                     where: { date: new Date(date), time: time }
                 });
+                const numToDate: number = await Queue.count({
+                    where: { date: new Date(date) }
+                })
 
                 if (num < schedule.operator) {
                     const queue: QueueInstance = await Queue.create({
-                        date, name, phone, nik, time, purpose_id, status: false
+                        queue_number: moment(date).format('Y-MM-DD') + '_' + (numToDate + 1),
+                        date, name, phone, nik, time, purpose_id, 
+                        status: 'Belum Datang',
+                        called: 0
                     });
                     const p: Bluebird<DocumentInstance>[] = [];
 
@@ -78,12 +88,31 @@ const queuesRoute: Routes = (
                     });
 
                     const r: DocumentInstance[] = await Bluebird.all(p);
+                    
+                    io.emit('NEW_QUEUE');
 
                     const body: OkResponse = { data: queue };
                     res.json(body);
                 } else {
                     throw new InvalidRequestError('Jumlah quota pendaftaran sudah habis');
                 }
+            }
+        )
+    )
+
+    router.put(
+        '/:id',
+        a(
+            async(req: express.Request, res: express.Response): Promise<void> => {
+                const { id }: { id: number } = req.params;
+                const data: QueueAttributes = req.body;
+                console.log(data);
+				const queue: QueueInstance | null = await Queue.findByPk(id);
+				if (!queue) throw new NotFoundError();
+				await queue.update(data);
+				const body: OkResponse = { data: queue };
+
+				res.json(body);
             }
         )
     )

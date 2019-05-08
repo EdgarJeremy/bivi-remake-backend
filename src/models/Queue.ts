@@ -6,11 +6,13 @@ import ModelFactoryInterface from './typings/ModelFactoryInterface';
 export interface QueueAttributes {
 	id?: number;
 
+	queue_number: string;
 	date: Date;
 	name: string;
 	phone: string;
 	nik: string;
-	status: boolean;
+	status: 'Belum Datang' | 'Datang' | 'Tidak Datang';
+	called: number;
 	time: string;
 	purpose_id?: number;
 	user_id?: number;
@@ -26,6 +28,10 @@ export const QueueFactory: Factory<QueueInstance, QueueAttributes> = (
 	DataTypes: Sequelize.DataTypes,
 ): Sequelize.Model<QueueInstance, QueueAttributes> => {
 	const attributes: SequelizeAttributes<QueueAttributes> = {
+		queue_number: {
+			type: DataTypes.STRING(191),
+			allowNull: false,
+		},
 		date: {
 			type: DataTypes.DATEONLY,
 			allowNull: false,
@@ -43,12 +49,16 @@ export const QueueFactory: Factory<QueueInstance, QueueAttributes> = (
 			allowNull: false,
 		},
 		status: {
-			type: DataTypes.BOOLEAN,
+			type: DataTypes.ENUM(['Belum Datang', 'Datang', 'Tidak Datang']),
 			allowNull: false,
-			defaultValue: false,
+			defaultValue: 'Belum Datang',
 		},
 		time: {
 			type: DataTypes.TIME,
+			allowNull: false
+		},
+		called: {
+			type: DataTypes.INTEGER,
 			allowNull: false
 		}
 	};
