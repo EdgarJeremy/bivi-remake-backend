@@ -53,7 +53,12 @@ const queuesRoute: Routes = (
         a(
             async (req: express.Request, res: express.Response): Promise<void> => {
                 const { date, name, phone, nik, time, purpose_id }: QueueAttributes = req.body;
+                const { captcha }: { captcha: string } = req.body;
                 const { documents }: { documents: { name: string, data: string }[] } = req.body;
+                console.log(req.session);
+                if(req.session) {
+                    if(req.session.captcha_text !== captcha) throw new InvalidRequestError('Captcha salah');
+                }
 
                 const schedule: ScheduleInstance | null = await Schedule.findOne({
                     where: { date: new Date(date) }
@@ -106,11 +111,18 @@ const queuesRoute: Routes = (
             async(req: express.Request, res: express.Response): Promise<void> => {
                 const { id }: { id: number } = req.params;
                 const data: QueueAttributes = req.body;
-                console.log(data);
 				const queue: QueueInstance | null = await Queue.findByPk(id);
 				if (!queue) throw new NotFoundError();
-				await queue.update(data);
-				const body: OkResponse = { data: queue };
+                await queue.update(data);
+                const body: OkResponse = { data: queue };
+
+                if(data.called) {
+                    io.emit('QUEUE_CALLED');
+                }
+
+                if(data.status === 'Datang') {
+                    io.emit('QUEUE_ARRIVED');
+                }
 
 				res.json(body);
             }
