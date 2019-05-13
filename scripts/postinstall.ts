@@ -9,8 +9,6 @@ import { UserInstance } from '../src/models/User';
 
 const log: (msg: string) => void = console.log;
 
-d.config();
-
 const dotenv: string = `
 # Database
 DB_HOST=localhost
@@ -41,6 +39,8 @@ if (!fs.existsSync(path.resolve(__dirname, '..', '.env'))) {
 	fs.writeFileSync(path.resolve(__dirname, '..', '.env'), dotenv);
 }
 log(chalk.cyan('(postinstall) : File .env telah dibuat\n'));
+
+d.config();
 
 log(chalk.cyan('(postinstall) : Membuat user admin'));
 const models: ModelFactoryInterface = createModels();
