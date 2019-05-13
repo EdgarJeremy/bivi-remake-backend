@@ -24,7 +24,7 @@ const createModels: Function = (): ModelFactoryInterface => {
 		},
 		timezone: '+08:00',
 		operatorsAliases: false,
-		logging: false,
+		logging: console.log,
 	});
 	const db: ModelFactoryInterface = {
 		sequelize,
