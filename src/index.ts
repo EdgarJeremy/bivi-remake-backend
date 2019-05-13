@@ -106,7 +106,6 @@ app.get(
 		const captcha: svgCaptcha.CaptchaObj = svgCaptcha.create();
 		if(req.session) {
 			req.session.captcha_text = captcha.text;
-			console.log(req.session);
 		}
 
 		res.type('svg');

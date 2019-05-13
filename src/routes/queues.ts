@@ -55,7 +55,7 @@ const queuesRoute: Routes = (
                 const { date, name, phone, nik, time, purpose_id }: QueueAttributes = req.body;
                 const { captcha }: { captcha: string } = req.body;
                 const { documents }: { documents: { name: string, data: string }[] } = req.body;
-                console.log(req.session);
+                
                 if(req.session) {
                     if(req.session.captcha_text !== captcha) throw new InvalidRequestError('Captcha salah');
                 }
