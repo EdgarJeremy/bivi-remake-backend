@@ -10,6 +10,7 @@ import { ScheduleInstance, ScheduleAttributes } from '../models/Schedule';
 import NotFoundError from '../classes/NotFoundError';
 import { createSchedule, editSchedule } from './schedules.validation';
 import { ScheduleTime, ScheduleTimeList } from '../helpers/ScheduleTime';
+import InvalidRequestError from '../classes/InvalidRequestError';
 
 const schedulesRoute: Routes = (
 	app: express.Application,
@@ -72,6 +73,11 @@ const schedulesRoute: Routes = (
 					break_end,
 					operator
 				}: ScheduleAttributes = req.body;
+
+				const found: ScheduleInstance | null = await Schedule.findOne({ where: { date: date } });
+
+				if(found) throw new InvalidRequestError('Jadwal sudah ada');
+
 				const schedule: ScheduleInstance = await Schedule.create({
 					date: date,
 					open: open,
