@@ -49,7 +49,7 @@ export class ScheduleTime {
         const interval: number = processing_time + tolerance;
         const list: ScheduleTimeList = [];
 
-        while (rangeStart.toLocaleTimeString() !== rangeEnd.toLocaleTimeString()) {
+        while (rangeStart.getTime() < rangeEnd.getTime()) {
             if (rangeStart.getTime() < rangeBs.getTime() || rangeStart.getTime() > rangeBe.getTime()) {
                 list.push({
                     time: rangeStart.toLocaleTimeString(),
