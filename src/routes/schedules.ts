@@ -27,7 +27,14 @@ const schedulesRoute: Routes = (
 				const parsed: sequelize.FindOptions<ScheduleInstance> = Parser.parseQuery<
 					ScheduleInstance
 				>(req.query.q, models);
-				const data: PaginatedResult<ScheduleInstance> = await Schedule.findAndCountAll(parsed);
+				const data: PaginatedResult<ScheduleInstance> = await Schedule.findAndCountAll({
+					...parsed,
+					where: {
+						date: {
+							[models.sequelize.Op.gte]: new Date()
+						}
+					}
+				});
 				const body: OkResponse = { data };
 
 				res.json(body);
