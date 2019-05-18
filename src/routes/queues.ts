@@ -35,10 +35,6 @@ const queuesRoute: Routes = (
 
                 const data: PaginatedResult<QueueInstance> = await Queue.findAndCountAll({
                     ...parsed,
-                    where: {
-                        date: new Date(),
-                        status: 'Belum Datang'
-                    }
                 });
                 const body: OkResponse = { data };
 

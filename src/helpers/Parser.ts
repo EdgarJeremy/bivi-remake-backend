@@ -10,6 +10,7 @@ export interface ICollectionOptions {
 	attributes?: string[];
 	include?: ICollectionIncludeOptions[];
 	order?: string[] | string[][];
+	where?: any
 }
 
 interface ICollectionIncludeOptions extends ICollectionOptions {
@@ -24,12 +25,14 @@ export class Parser {
 			include: raw.include
 				? raw.include.map((m: ICollectionIncludeOptions) => ({
 						model: models[m.model],
-						attributes: m.attributes ? m.attributes : ['id']
+						attributes: m.attributes ? m.attributes : ['id'],
+						where: m.where
 				  }))
 				: [],
 			limit: raw.limit,
 			offset: raw.offset,
-			order: raw.order
+			order: raw.order,
+			where: raw.where
 		};
 
 		return parsed;
