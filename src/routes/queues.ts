@@ -58,6 +58,7 @@ const queuesRoute: Routes = (
                 
                 if(req.session) {
                     if(req.session.captcha_text !== captcha) throw new InvalidRequestError('Captcha salah');
+                    req.session.captcha_text = null;
                 }
 
                 const schedule: ScheduleInstance | null = await Schedule.findOne({
