@@ -12,9 +12,9 @@ const log: (msg: string) => void = console.log;
 const dotenv: string = `
 # Database
 DB_HOST=localhost
-DB_DIALECT=mysql
-DB_DATABASE=
-DB_USER=
+DB_DIALECT=postgres
+DB_DATABASE=bivi
+DB_USER=postgres
 DB_PASS=
 DB_FORCE_RENEW=false
 
@@ -24,8 +24,8 @@ REQUEST_LIMIT=1024mb
 ALLOW_ORIGIN=*
 
 # Token
-TOKEN_SECRET=
-REFRESH_TOKEN_SECRET=
+TOKEN_SECRET=bivitokensecret221b
+REFRESH_TOKEN_SECRET=bivirefreshtokensecret221b
 TOKEN_EXPIRATION=1m
 REFRESH_TOKEN_EXPIRATION=7d
 
