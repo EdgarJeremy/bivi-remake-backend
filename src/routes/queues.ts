@@ -126,6 +126,21 @@ const queuesRoute: Routes = (
         )
     )
 
+    router.delete(
+        '/:id',
+        a(
+            async(req: express.Request, res: express.Response): Promise<void> => {
+                const { id }: { id: number } = req.params;
+                const queue: QueueInstance | null = await Queue.findByPk(id);
+                if(!queue) throw new NotFoundError('Antrian tidak ditemukan');
+                await queue.destroy();
+                const body: OkResponse = { data: queue };
+
+                res.json(body);
+            }
+        )
+    )
+
     return router;
 }
 
