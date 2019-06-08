@@ -72,7 +72,7 @@ const queuesRoute: Routes = (
 
                 if (num < schedule.operator) {
                     const queue: QueueInstance = await Queue.create({
-                        queue_number: moment(date).format('Y-MM-DD') + '_' + (numToDate + 1),
+                        queue_number: parseInt(`${moment(date).format('YYMMDD')}${(numToDate + 1)}`),
                         date, name, phone, nik, time, purpose_id, 
                         status: 'Belum Datang',
                         called: 0
