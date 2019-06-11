@@ -79,6 +79,8 @@ routes.forEach((route: SiriusRouter) => {
 app.get(
 	'/app_meta',
 	(req: express.Request, res: express.Response): void => {
+		console.log(`Client Origin: ${req.get('origin')}`);
+		console.log(`Client IP: ${req.socket.remoteAddress}`);
 		let data: { routes: any[]; models: any[] } = { routes: [], models: [] };
 		Object.keys(routeData).forEach((route: any) => {
 			data.routes.push({

@@ -43,6 +43,24 @@ const queuesRoute: Routes = (
         )
     )
 
+    router.get(
+        '/:id',
+        Parser.validateQ(),
+        a(
+            async(req: express.Request, res: express.Response): Promise<void> => {
+                const { id }: { id: number } = req.params;
+                const parsed: sequelize.FindOptions<QueueInstance> = Parser.parseQuery<
+                    QueueInstance
+                >(req.query.q, models);
+                const queue: QueueInstance | null = await Queue.findByPk(id, parsed);
+                if(!queue) throw new NotFoundError('Antrian tidak ditemukan');
+                const body: OkResponse = { data: queue };
+
+                res.json(body);
+            }
+        )
+    )
+
     router.post(
         '/',
         createQueue,
