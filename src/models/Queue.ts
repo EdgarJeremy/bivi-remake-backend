@@ -6,7 +6,7 @@ import ModelFactoryInterface from './typings/ModelFactoryInterface';
 export interface QueueAttributes {
 	id?: number;
 
-	queue_number: string;
+	queue_number: number;
 	date: Date;
 	name: string;
 	phone: string;
@@ -29,7 +29,7 @@ export const QueueFactory: Factory<QueueInstance, QueueAttributes> = (
 ): Sequelize.Model<QueueInstance, QueueAttributes> => {
 	const attributes: SequelizeAttributes<QueueAttributes> = {
 		queue_number: {
-			type: DataTypes.STRING(191),
+			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
 		date: {
