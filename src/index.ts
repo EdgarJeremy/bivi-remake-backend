@@ -131,20 +131,20 @@ models.sequelize
 	.then(
 		(): void => {
 
-			setInterval(async function (): Promise<void> {
-				const t: [number, QueueInstance[]] = await models.Queue.update({
-					status: 'Tidak Datang'
-				}, {
-						where: {
-							status: 'Belum Datang',
-							date: new Date(),
-							time: { [models.sequelize.Op.lt]: moment().format('HH:mm:ss') }
-						}
-					});
-				if (t[0] > 0) {
-					io.emit('UPDATE_LIST');
-				}
-			}, 1000 * 1);
+			// setInterval(async function (): Promise<void> {
+			// 	const t: [number, QueueInstance[]] = await models.Queue.update({
+			// 		status: 'Tidak Datang'
+			// 	}, {
+			// 			where: {
+			// 				status: 'Belum Datang',
+			// 				date: new Date(),
+			// 				time: { [models.sequelize.Op.lt]: moment().format('HH:mm:ss') }
+			// 			}
+			// 		});
+			// 	if (t[0] > 0) {
+			// 		io.emit('UPDATE_LIST');
+			// 	}
+			// }, 1000 * 1);
 
 			web.listen(
 				process.env.PORT || 1234,
