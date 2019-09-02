@@ -135,7 +135,7 @@ const queuesRoute: Routes = (
                     io.emit('QUEUE_CALLED');
                 }
 
-                if(data.status === 'Datang') {
+                if(data.status === 'Datang' || data.status === 'Tidak Datang') {
                     io.emit('QUEUE_ARRIVED');
                 }
 
