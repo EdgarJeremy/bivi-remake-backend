@@ -140,7 +140,7 @@ const tokenMiddleware: TokenMiddleware = (models: ModelFactoryInterface): expres
 								res.set('Access-Control-Expose-Headers', 'x-access-token, x-refresh-token');
 								res.set('x-access-token', newTokens.token);
 								res.set('x-refresh-token', newTokens.refreshToken);
-								await refreshTokenInstance.update({ used: true });
+								// await refreshTokenInstance.update({ used: true });
 								req.user = newTokens.user;
 							}
 						}
