@@ -131,7 +131,7 @@ const queuesRoute: Routes = (
                 await queue.update(data);
                 const body: OkResponse = { data: queue };
 
-                if(data.called) {
+                if(data.called >= 0) {
                     io.emit('QUEUE_CALLED');
                 }
 
