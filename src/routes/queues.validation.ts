@@ -60,11 +60,11 @@ export const createQueue: express.Handler[] = wrapValidation(
                 errorMessage: 'Data dokumen tidak valid'
             }
         },
-        captcha: {
+        token: {
             in: 'body',
             isEmpty: {
                 negated: true,
-                errorMessage: 'Captcha harus diisi'
+                errorMessage: 'Token harus diisi'
             }
         }
     })
