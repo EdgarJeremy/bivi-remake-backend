@@ -25,7 +25,22 @@ const purposesRoute: Routes = (
 				const parsed: sequelize.FindOptions<PurposeInstance> = Parser.parseQuery<
 					PurposeInstance
 				>(req.query.q, models);
+				// @ts-ignore
+				const selected_date = parsed.where ? parsed.where.selected_date : null;
+				console.log(selected_date);
+				// @ts-ignore
+				parsed.where && delete parsed.where.selected_date;
 				const data: PaginatedResult<PurposeInstance> = await Purpose.findAndCountAll(parsed);
+				for (let i = 0; i < data.rows.length; i++) {
+					const total = await models.Queue.count({ where: { date: selected_date } });
+					const schedule = await models.Schedule.findOne({ where: { date: selected_date }, include: [{ model: models.Limitation, include: [{ model: models.Purpose, where: { id: data.rows[i].id! } }] }] });
+					if(schedule) {
+						if(schedule.dataValues.limitations[0]) {
+							// @ts-ignore
+							data.rows[i].dataValues.quota_exceeded = total === schedule.dataValues.limitations[0].limit;
+						}
+					}
+				}
 				const body: OkResponse = { data };
 
 				res.json(body);

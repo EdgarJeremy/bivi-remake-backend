@@ -13,7 +13,7 @@ export interface PurposeAttributes {
 	updated_at?: Date;
 }
 
-export interface PurposeInstance extends Sequelize.Instance<PurposeAttributes>, PurposeAttributes {}
+export interface PurposeInstance extends Sequelize.Instance<PurposeAttributes>, PurposeAttributes { }
 
 export const PurposeFactory: Factory<PurposeInstance, PurposeAttributes> = (
 	sequelize: Sequelize.Sequelize,
@@ -34,7 +34,10 @@ export const PurposeFactory: Factory<PurposeInstance, PurposeAttributes> = (
 		PurposeAttributes
 	>('purpose', attributes, { underscored: true });
 
-	Purpose.associate = (models: ModelFactoryInterface): void => {};
+	Purpose.associate = (models: ModelFactoryInterface): void => {
+		Purpose.hasMany(models.Queue, { onDelete: 'cascade' });
+		Purpose.hasMany(models.Limitation, { onDelete: 'cascade' });
+	};
 
 	return Purpose;
 };

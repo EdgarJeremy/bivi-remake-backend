@@ -22,9 +22,9 @@ export interface ScheduleAttributes {
 
 export interface ScheduleInstance
 	extends Sequelize.Instance<ScheduleAttributes>,
-		ScheduleAttributes {
-			dataValues: any;
-		}
+	ScheduleAttributes {
+	dataValues: any;
+}
 
 export const ScheduleFactory: Factory<ScheduleInstance, ScheduleAttributes> = (
 	sequelize: Sequelize.Sequelize,
@@ -69,7 +69,9 @@ export const ScheduleFactory: Factory<ScheduleInstance, ScheduleAttributes> = (
 		ScheduleAttributes
 	>('schedule', attributes, { underscored: true });
 
-	Schedule.associate = (models: ModelFactoryInterface): void => {};
+	Schedule.associate = (models: ModelFactoryInterface): void => {
+		Schedule.hasMany(models.Limitation, { onDelete: 'cascade' });
+	};
 
 	return Schedule;
 };

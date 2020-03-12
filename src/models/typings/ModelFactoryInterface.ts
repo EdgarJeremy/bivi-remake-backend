@@ -6,6 +6,7 @@ import { RequirementInstance, RequirementAttributes } from '../Requirement';
 import { QueueInstance, QueueAttributes } from '../Queue';
 import { DocumentInstance, DocumentAttributes } from '../Document';
 import { ScheduleInstance, ScheduleAttributes } from '../Schedule';
+import { LimitationInstance, LimitationAttributes } from '../Limitation';
 
 interface Obj {
 	[s: string]: any;
@@ -21,4 +22,5 @@ export default interface ModelFactoryInterface extends Obj {
 	Queue: Sequelize.Model<QueueInstance, QueueAttributes>;
 	Document: Sequelize.Model<DocumentInstance, DocumentAttributes>;
 	Schedule: Sequelize.Model<ScheduleInstance, ScheduleAttributes>;
+	Limitation: Sequelize.Model<LimitationInstance, LimitationAttributes>;
 }

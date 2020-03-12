@@ -7,6 +7,7 @@ import { RequirementFactory } from './Requirement';
 import { QueueFactory } from './Queue';
 import { DocumentFactory } from './Document';
 import { ScheduleFactory } from './Schedule';
+import { LimitationFactory } from './Limitation';
 
 const createModels: Function = (): ModelFactoryInterface => {
 	const {
@@ -36,6 +37,7 @@ const createModels: Function = (): ModelFactoryInterface => {
 		Queue: QueueFactory(sequelize, Sequelize),
 		Document: DocumentFactory(sequelize, Sequelize),
 		Schedule: ScheduleFactory(sequelize, Sequelize),
+		Limitation: LimitationFactory(sequelize, Sequelize)
 	};
 
 	Object.keys(db).forEach(
