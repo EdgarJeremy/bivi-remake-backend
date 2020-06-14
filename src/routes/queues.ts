@@ -75,13 +75,13 @@ const queuesRoute: Routes = (
                 //     if(req.session.captcha_text !== captcha) throw new InvalidRequestError('Captcha salah');
                 //     req.session.captcha_text = null;
                 // }
-
+                console.log('before captcha');
                 const recaptcha_secret: string = `${process.env.RECAPTCHA_SECRET}`;
                 const recaptcha_token: string = req.body.token;
                 const url: string = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptcha_secret}&response=${recaptcha_token}`;
                 const recaptcha_response = await fetch(url, { method: 'POST' });
                 const recaptcha_data = await recaptcha_response.json();
-                
+                console.log('after captcha', recaptcha_data);
                 if(!recaptcha_data.success) {
                     throw new Error(JSON.stringify(recaptcha_data['error-codes']));
                 }
@@ -98,7 +98,6 @@ const queuesRoute: Routes = (
                 const numToDate: number = await Queue.count({
                     where: { date: new Date(date) }
                 })
-
                 if (num < schedule.operator) {
                     const queue: QueueInstance = await Queue.create({
                         queue_number: parseInt(`${moment(date).format('YYMMDD')}${(numToDate + 1)}`),

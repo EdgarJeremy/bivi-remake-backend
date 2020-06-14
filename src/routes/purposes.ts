@@ -27,7 +27,7 @@ const purposesRoute: Routes = (
 				>(req.query.q, models);
 				// @ts-ignore
 				const selected_date = parsed.where ? parsed.where.selected_date : null;
-				console.log(selected_date);
+				// console.log(selected_date);
 				// @ts-ignore
 				parsed.where && delete parsed.where.selected_date;
 				const data: PaginatedResult<PurposeInstance> = await Purpose.findAndCountAll(parsed);

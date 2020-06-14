@@ -59,6 +59,23 @@ const limitationsRoute: Routes = (
 		),
 	);
 
+	router.put(
+		'/:id',
+		a(
+			async (req: express.Request, res: express.Response): Promise<void> => {
+				const { id }: { id: number } = req.params;
+				const data: LimitationAttributes = req.body;
+				const limitation: LimitationInstance | null = await Limitation.findByPk(id);
+				if (!limitation) throw new NotFoundError();
+				await limitation.update(data);
+				const body: OkResponse = { data: limitation };
+
+				res.json(body);
+			},
+		),
+	);
+
+
 	return router;
 };
 
