@@ -32,7 +32,7 @@ const purposesRoute: Routes = (
 				parsed.where && delete parsed.where.selected_date;
 				const data: PaginatedResult<PurposeInstance> = await Purpose.findAndCountAll(parsed);
 				for (let i = 0; i < data.rows.length; i++) {
-					const total = await models.Queue.count({ where: { date: selected_date } });
+					const total = await models.Queue.count({ where: { date: selected_date, purpose_id: data.rows[i].id! } });
 					const schedule = await models.Schedule.findOne({ where: { date: selected_date }, include: [{ model: models.Limitation, include: [{ model: models.Purpose, where: { id: data.rows[i].id! } }] }] });
 					if(schedule) {
 						if(schedule.dataValues.limitations[0]) {
@@ -41,6 +41,8 @@ const purposesRoute: Routes = (
 						}
 					}
 				}
+				// @ts-ignore
+				//console.log(data.rows.map(d => d.dataValues));
 				const body: OkResponse = { data };
 
 				res.json(body);
