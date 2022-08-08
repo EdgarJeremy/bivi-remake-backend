@@ -1,5 +1,5 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import ModelFactoryInterface from '../models/typings/ModelFactoryInterface';
 import { Routes } from './typings/RouteInterface';
 import a from '../middlewares/wrapper/a';
@@ -64,6 +64,17 @@ const usersRoute: Routes = (
 					password: string;
 					type: 'administrator' | 'operator';
 				} = req.body;
+				// @ts-ignore
+				if(!req.user) {
+					res.status(401).json({message: 'Unauthorized'});
+					return;
+				}
+				if(req.user.type !== 'administrator') {
+					res.status(401).json({message: 'Unauthorized'});
+					return;
+				}
+				// @ts-ignore
+				console.log(req.user.dataValues);
 				const user: UserInstance = await models.User.create({
 					name,
 					username,

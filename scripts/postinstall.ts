@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import d from 'dotenv';
 import fs from 'fs';
 import path from 'path';
